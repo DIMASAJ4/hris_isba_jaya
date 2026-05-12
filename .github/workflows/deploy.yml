@@ -1,0 +1,55 @@
+name: 🚀 Deploy HRIS ISBA JAYA via FTP
+
+on:
+  push:
+    branches:
+      - main  # Ganti ke 'master' jika nama branch utama kamu adalah master
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploying to Server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2' # Sesuaikan dengan versi PHP server kamu
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, bcmath, gd
+
+      - name: 📥 Install Composer Dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: 🛠️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Install NPM & Build Assets
+        run: |
+          npm install
+          npm run build
+
+      - name: 📂 Sync files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          # Path di server tujuan (biasanya public_html atau direktori subdomain)
+          server-dir: ./ 
+          # File yang tidak perlu di-upload untuk menghemat waktu & keamanan
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/tests/**
+            storage/framework/cache/**
+            storage/framework/sessions/**
+            storage/framework/views/**
+            .env.example
+            phpunit.xml
+            README.md

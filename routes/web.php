@@ -24,6 +24,44 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+// 🛠️ SETUP ADMIN DARURAT (Hapus rute ini setelah berhasil login di server!)
+Route::get('/setup-admin-isba', function () {
+    try {
+        // 1. Pastikan Role tersedia
+        $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
+        \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'chairman']);
+        \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'member']);
+
+        // 2. Pastikan Permission dasar tersedia
+        \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'view_own_profile']);
+
+        // 3. Buat User Admin
+        $user = \App\Models\User::updateOrCreate(
+            ['email' => 'admin@isbajaya.org'],
+            [
+                'name' => 'Super Admin ISBA',
+                'password' => \Illuminate\Support\Facades\Hash::make('password123'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        // 4. Pasang Role Admin
+        $user->assignRole($adminRole);
+
+        return "<div style='font-family:sans-serif; padding:40px; text-align:center;'>
+                    <h2 style='color:#980D0D;'>✅ AKUN ADMIN SIAP!</h2>
+                    <p>Silakan login dengan akun berikut:</p>
+                    <div style='background:#f4f4f4; padding:20px; display:inline-block; border-radius:10px; text-align:left;'>
+                        Email: <b>admin@isbajaya.org</b><br>
+                        Password: <b>password123</b>
+                    </div><br><br>
+                    <a href='/login' style='background:#980D0D; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;'>Ke Halaman Login</a>
+                </div>";
+    } catch (\Exception $e) {
+        return "❌ Terjadi Kesalahan: " . $e->getMessage();
+    }
+});
+
 // Auth routes (Breeze)
 require __DIR__.'/auth.php';
 
