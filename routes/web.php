@@ -27,10 +27,13 @@ Route::get('/', function () {
 // 🛠️ SETUP ADMIN DARURAT (Hapus rute ini setelah berhasil login di server!)
 Route::get('/setup-admin-isba', function () {
     try {
-        // 0. Jalankan Migrasi (Buat Tabel)
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        // 0. Generate Key (Jika belum ada, untuk atasi error 419)
+        \Illuminate\Support\Facades\Artisan::call('key:generate', ['--force' => true]);
 
-        // 1. Pastikan Role tersedia
+        // 1. Jalankan Migrasi Bersih (Hapus tabel lama & buat baru)
+        \Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--force' => true]);
+
+        // 2. Pastikan Role tersedia
         $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
         \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'chairman']);
         \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'member']);
