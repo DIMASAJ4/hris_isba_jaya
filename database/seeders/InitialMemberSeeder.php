@@ -98,6 +98,7 @@ class InitialMemberSeeder extends Seeder
             ['name' => 'Chetrin Putria', 'uni' => 'Universitas Negeri Jakarta', 'addr' => 'Tanjung labu, lepar pongok', 'dept' => $deptAsrama->id, 'pos' => $posAnggota($deptAsrama->id)->id],
         ];
 
+        $i = 1;
         foreach ($members as $m) {
             Member::updateOrCreate(
                 ['full_name' => $m['name']],
@@ -109,7 +110,7 @@ class InitialMemberSeeder extends Seeder
                     'status' => 'Aktif',
                     'joined_at' => now(),
                     'batch_year' => date('Y'),
-                    'nim' => '000000', // Placeholder NIM
+                    'nim' => 'ISBA-' . str_pad($i++, 3, '0', STR_PAD_LEFT),
                     'gender' => 'Laki-laki', // Default
                 ]
             );
