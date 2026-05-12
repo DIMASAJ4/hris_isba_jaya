@@ -33,6 +33,14 @@ Route::get('/setup-admin-isba', function () {
         // // 1. Jalankan Migrasi Bersih (Matikan sementara karena error Termwind)
         // \Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--force' => true]);
 
+        // 🛠️ JURUS PAMUNGKAS: Kosongkan tabel secara paksa tanpa hapus struktur (Atasi Duplicate Entry)
+        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        \Illuminate\Support\Facades\DB::table('members')->truncate();
+        \Illuminate\Support\Facades\DB::table('positions')->truncate();
+        \Illuminate\Support\Facades\DB::table('departments')->truncate();
+        \Illuminate\Support\Facades\DB::table('users')->where('email', '!=', 'admin@isbajaya.org')->delete();
+        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         // 2. Pastikan Role tersedia
         $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
         \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'chairman']);
