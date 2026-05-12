@@ -27,48 +27,46 @@ Route::get('/', function () {
 // 🛠️ SETUP ADMIN DARURAT (Hapus rute ini setelah berhasil login di server!)
 Route::get('/setup-admin-isba', function () {
     try {
-        // // 0. Generate Key (Matikan sementara karena error Termwind)
-        // \Illuminate\Support\Facades\Artisan::call('key:generate', ['--force' => true]);
-
-        // // 1. Jalankan Migrasi Bersih (Matikan sementara karena error Termwind)
-        // \Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--force' => true]);
-
-        // 🛠️ JURUS PAMUNGKAS: Kosongkan tabel secara paksa tanpa hapus struktur (Atasi Duplicate Entry)
+        // 1. PEMBERSIHAN TOTAL (Raw SQL - Tanpa Artisan agar aman dari error Termwind)
         \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        \Illuminate\Support\Facades\DB::table('members')->truncate();
-        \Illuminate\Support\Facades\DB::table('positions')->truncate();
-        \Illuminate\Support\Facades\DB::table('departments')->truncate();
-        \Illuminate\Support\Facades\DB::table('users')->where('email', '!=', 'admin@isbajaya.org')->delete();
+        \Illuminate\Support\Facades\DB::table('members')->delete();
+        \Illuminate\Support\Facades\DB::table('positions')->delete();
+        \Illuminate\Support\Facades\DB::table('departments')->delete();
+        // Hapus semua user kecuali yang mungkin sedang kita pakai (jika ada)
+        \Illuminate\Support\Facades\DB::table('users')->delete();
         \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        // 2. Pastikan Role tersedia
-        $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
-        \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'chairman']);
-        \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'member']);
+        // 2. BUAT ULANG PERAN (Role) - Langsung ke Database
+        $adminRoleId = \Illuminate\Support\Facades\DB::table('roles')->insertGetId([
+            'name' => 'admin', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()
+        ]);
+        \Illuminate\Support\Facades\DB::table('roles')->insert(['name' => 'chairman', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()]);
+        \Illuminate\Support\Facades\DB::table('roles')->insert(['name' => 'member', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()]);
 
-        // 2. Pastikan Permission dasar tersedia
-        \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'view_own_profile']);
+        // 3. BUAT USER ADMIN
+        $adminId = \Illuminate\Support\Facades\DB::table('users')->insertGetId([
+            'name' => 'Super Admin ISBA',
+            'email' => 'admin@isbajaya.org',
+            'password' => \Illuminate\Support\Facades\Hash::make('password123'),
+            'email_verified_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
 
-        // 3. Buat User Admin
-        $user = \App\Models\User::updateOrCreate(
-            ['email' => 'admin@isbajaya.org'],
-            [
-                'name' => 'Super Admin ISBA',
-                'password' => \Illuminate\Support\Facades\Hash::make('password123'),
-                'email_verified_at' => now(),
-            ]
-        );
+        // 4. PASANG ROLE KE ADMIN
+        \Illuminate\Support\Facades\DB::table('model_has_roles')->insert([
+            'role_id' => $adminRoleId,
+            'model_type' => 'App\Models\User',
+            'model_id' => $adminId
+        ]);
 
-        // 4. Pasang Role Admin
-        $user->assignRole($adminRole);
-
-        // 5. Jalankan Seeder Anggota Awal
+        // 5. JALANKAN SEEDER DATA PENGURUS
         $seeder = new \Database\Seeders\InitialMemberSeeder();
         $seeder->run();
 
         return "<div style='font-family:sans-serif; padding:40px; text-align:center;'>
-                    <h2 style='color:#980D0D;'>✅ AKUN ADMIN SIAP!</h2>
-                    <p>Silakan login dengan akun berikut:</p>
+                    <h2 style='color:#980D0D;'>✅ DATABASE DIBERSIHKAN & ADMIN SIAP!</h2>
+                    <p>Semua data lama sudah dihapus dan data baru sudah dimasukkan.</p>
                     <div style='background:#f4f4f4; padding:20px; display:inline-block; border-radius:10px; text-align:left;'>
                         Email: <b>admin@isbajaya.org</b><br>
                         Password: <b>password123</b>
@@ -76,7 +74,7 @@ Route::get('/setup-admin-isba', function () {
                     <a href='/login' style='background:#980D0D; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;'>Ke Halaman Login</a>
                 </div>";
     } catch (\Exception $e) {
-        return "❌ Terjadi Kesalahan: " . $e->getMessage();
+        return "❌ Gagal Total: " . $e->getMessage() . "<br><br>Saran: Pastikan folder 'storage' di server sudah di-CHMOD ke 775 atau 777.";
     }
 });
 
