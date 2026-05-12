@@ -82,6 +82,15 @@ Route::get('/setup-admin-isba', function () {
     }
 });
 
+// Rute cek data (Hapus nanti!)
+Route::get('/debug-admin', function() {
+    $user = \App\Models\User::where('email', 'admin@isbajaya.org')->first();
+    if (!$user) return "❌ Akun admin@isbajaya.org TIDAK ditemukan di database.";
+    
+    $checkPass = \Illuminate\Support\Facades\Hash::check('password123', $user->password);
+    return "✅ Akun Ditemukan! Nama: " . $user->name . " | Password password123: " . ($checkPass ? 'COCOK' : 'SALAH');
+});
+
 // Auth routes (Breeze)
 require __DIR__.'/auth.php';
 
