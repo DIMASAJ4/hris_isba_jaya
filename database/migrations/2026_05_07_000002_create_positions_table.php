@@ -12,12 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('department_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->enum('level', [
-                'Level 1 (Ketua)',
-                'Level 2 (Manajerial)',
-                'Level 3 (Staf Ahli)',
-                'Level 4 (Pelaksana)'
-            ])->default('Level 4 (Pelaksana)');
+            $table->string('level')->default('Level 4 (Pelaksana)');
             $table->timestamps();
         });
     }
