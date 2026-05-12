@@ -48,6 +48,10 @@ Route::get('/setup-admin-isba', function () {
         // 4. Pasang Role Admin
         $user->assignRole($adminRole);
 
+        // 5. Jalankan Seeder Anggota Awal
+        $seeder = new \Database\Seeders\InitialMemberSeeder();
+        $seeder->run();
+
         return "<div style='font-family:sans-serif; padding:40px; text-align:center;'>
                     <h2 style='color:#980D0D;'>✅ AKUN ADMIN SIAP!</h2>
                     <p>Silakan login dengan akun berikut:</p>
