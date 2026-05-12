@@ -110,10 +110,12 @@ class InitialMemberSeeder extends Seeder
                     'status' => 'Aktif',
                     'joined_at' => now(),
                     'batch_year' => date('Y'),
-                    'nim' => 'ISBA-' . str_pad($i++, 3, '0', STR_PAD_LEFT),
+                    'nim' => 'ISBA-' . str_pad($i, 3, '0', STR_PAD_LEFT),
+                    'member_code' => 'ISBA-' . date('Y') . '-' . str_pad($i, 3, '0', STR_PAD_LEFT),
                     'gender' => 'Laki-laki', // Default
                 ]
             );
+            $i++;
         }
     }
 }
