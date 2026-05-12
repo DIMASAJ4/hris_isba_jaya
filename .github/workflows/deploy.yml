@@ -39,8 +39,8 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
-          # Path di server tujuan (biasanya public_html atau direktori subdomain)
-          server-dir: ./ 
+          # Path di server tujuan (disesuaikan dengan screenshot File Manager)
+          server-dir: htdocs/hris-isba-jaya/
           # File yang tidak perlu di-upload untuk menghemat waktu & keamanan
           exclude: |
             **/.git*
