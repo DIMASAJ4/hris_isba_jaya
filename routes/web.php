@@ -27,6 +27,9 @@ Route::get('/', function () {
 // 🛠️ SETUP ADMIN DARURAT (Hapus rute ini setelah berhasil login di server!)
 Route::get('/setup-admin-isba', function () {
     try {
+        // 0. Jalankan Migrasi (Buat Tabel)
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+
         // 1. Pastikan Role tersedia
         $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
         \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'chairman']);
