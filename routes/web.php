@@ -32,8 +32,12 @@ Route::get('/setup-admin-isba', function () {
         \Illuminate\Support\Facades\DB::table('members')->delete();
         \Illuminate\Support\Facades\DB::table('positions')->delete();
         \Illuminate\Support\Facades\DB::table('departments')->delete();
-        // Hapus semua user kecuali yang mungkin sedang kita pakai (jika ada)
         \Illuminate\Support\Facades\DB::table('users')->delete();
+        \Illuminate\Support\Facades\DB::table('roles')->delete();
+        \Illuminate\Support\Facades\DB::table('permissions')->delete();
+        \Illuminate\Support\Facades\DB::table('model_has_roles')->delete();
+        \Illuminate\Support\Facades\DB::table('model_has_permissions')->delete();
+        \Illuminate\Support\Facades\DB::table('role_has_permissions')->delete();
         \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         // 2. BUAT ULANG PERAN (Role) - Langsung ke Database
