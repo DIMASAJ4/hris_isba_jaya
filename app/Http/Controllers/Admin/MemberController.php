@@ -143,6 +143,25 @@ class MemberController extends Controller
 
         $member->update($data);
 
+        // CREATE ACCOUNT LOGIC
+        if ($request->create_account && !$member->user_id) {
+            $request->validate([
+                'user_email' => 'required|email|unique:users,email',
+                'user_password' => 'required|min:8',
+                'user_role' => 'required|exists:roles,name',
+            ]);
+
+            $user = User::create([
+                'name' => $member->full_name,
+                'email' => $request->user_email,
+                'password' => Hash::make($request->user_password),
+            ]);
+
+            $user->assignRole($request->user_role);
+            
+            $member->update(['user_id' => $user->id]);
+        }
+
         if ($oldStatus !== $member->status) {
             MemberStatusLog::create([
                 'member_id' => $member->id,

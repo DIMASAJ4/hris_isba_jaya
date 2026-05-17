@@ -217,12 +217,42 @@
           </div>
           <div>
             <p class="text-sm font-semibold text-navy">Akun Terhubung</p>
-            <p class="text-xs text-gray-500">{{ $member->user->email }} ({{ $member->user->getRoleNames()->first() }})</p>
+            <p class="text-xs text-gray-500">{{ $member->user->email }} ({{ $member->user->getRoleNames()->first() ?? 'Tidak ada role' }})</p>
           </div>
           <a href="{{ route('admin.settings.index') }}" class="ml-auto text-xs text-primary hover:underline">Kelola Akun</a>
         </div>
         @else
-        <p class="text-sm text-gray-500 italic">Anggota ini belum memiliki akun sistem.</p>
+        <div x-data="{ createAccount: false }" class="space-y-4">
+          <label class="flex items-center gap-3 cursor-pointer p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+            <input type="checkbox" name="create_account" value="1" x-model="createAccount"
+              class="w-5 h-5 rounded text-primary focus:ring-primary/30">
+            <div>
+              <span class="font-medium text-navy block">Buatkan Akun Login</span>
+              <span class="text-xs text-gray-500">Anggota akan bisa login ke dalam sistem.</span>
+            </div>
+          </label>
+
+          <div x-show="createAccount" x-collapse class="space-y-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+            <div>
+              <label class="form-label">Email Login <span class="text-red-500">*</span></label>
+              <input type="email" name="user_email" class="form-input" placeholder="email@isbajaya.org" value="{{ old('user_email', $member->email) }}">
+              @error('user_email')<p class="form-error">{{ $message }}</p>@enderror
+            </div>
+            <div>
+              <label class="form-label">Password <span class="text-red-500">*</span></label>
+              <input type="password" name="user_password" class="form-input" placeholder="Minimal 8 karakter">
+              @error('user_password')<p class="form-error">{{ $message }}</p>@enderror
+            </div>
+            <div>
+              <label class="form-label">Role <span class="text-red-500">*</span></label>
+              <select name="user_role" class="form-select">
+                <option value="member">Member (Standar)</option>
+                <option value="chairman">Chairman (Pengurus Inti)</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+          </div>
+        </div>
         @endif
       </div>
     </div>

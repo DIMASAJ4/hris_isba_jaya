@@ -17,7 +17,8 @@ class UserController extends Controller
         $users = User::with('roles')->paginate(10);
         $roles = Role::all();
         $permissions = Permission::all();
-        return view('admin.settings.index', compact('users', 'roles', 'permissions'));
+        $membersWithoutUser = Member::whereNull('user_id')->get();
+        return view('admin.settings.index', compact('users', 'roles', 'permissions', 'membersWithoutUser'));
     }
 
     public function store(Request $request)
@@ -37,7 +38,12 @@ class UserController extends Controller
 
         $user->assignRole($request->role);
 
-        if ($request->role === 'member') {
+        if ($request->filled('member_id')) {
+            $member = Member::find($request->member_id);
+            if ($member) {
+                $member->update(['user_id' => $user->id]);
+            }
+        } elseif ($request->role === 'member') {
             Member::create([
                 'user_id' => $user->id,
                 'full_name' => $user->name,

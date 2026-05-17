@@ -160,6 +160,17 @@
       @csrf
       <div id="user-method-container"></div>
       <div class="p-6 space-y-4">
+        <div id="member-selection" class="mb-4">
+          <label class="form-label">Hubungkan dengan Anggota (Opsional)</label>
+          <select name="member_id" id="user-member-id" class="form-select">
+            <option value="">-- Buat Anggota Baru --</option>
+            @foreach($membersWithoutUser as $member)
+            <option value="{{ $member->id }}">{{ $member->full_name }} ({{ $member->nim }})</option>
+            @endforeach
+          </select>
+          <p class="text-xs text-gray-500 mt-1">Pilih jika ingin membuat akun untuk anggota yang sudah ada.</p>
+        </div>
+
         <div>
           <label class="form-label">Nama Lengkap</label>
           <input type="text" name="name" id="user-name" class="form-input" required>
@@ -226,6 +237,7 @@
     const title = document.getElementById('user-modal-title');
     const methodContainer = document.getElementById('user-method-container');
     const pwdField = document.getElementById('password-field');
+    const memberSelection = document.getElementById('member-selection');
     
     if (user) {
       title.textContent = 'Edit Pengguna';
@@ -235,12 +247,14 @@
       document.getElementById('user-email').value = user.email;
       document.getElementById('user-role').value = user.roles[0]?.name || 'member';
       pwdField.classList.add('hidden');
+      if (memberSelection) memberSelection.classList.add('hidden');
     } else {
       title.textContent = 'Tambah Pengguna';
       form.action = "{{ route('admin.settings.users.store') }}";
       methodContainer.innerHTML = '';
       form.reset();
       pwdField.classList.remove('hidden');
+      if (memberSelection) memberSelection.classList.remove('hidden');
     }
     modal.classList.remove('hidden');
   }
