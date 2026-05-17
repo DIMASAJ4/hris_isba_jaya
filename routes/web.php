@@ -24,6 +24,48 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+// 🛠️ GENERATE SEMUA AKUN ANGGOTA
+Route::get('/generate-all-accounts', function () {
+    $members = \App\Models\Member::whereNull('user_id')->get();
+    
+    if ($members->isEmpty()) {
+        return "<h2 style='color:#980D0D; font-family:sans-serif;'>Semua anggota sudah memiliki akun!</h2>";
+    }
+
+    $output = "<h2 style='color:#980D0D; font-family:sans-serif;'>✅ AKUN BERHASIL DIBUAT</h2>";
+    $output .= "<p style='font-family:sans-serif;'>Silakan copy data berikut (Email dan Password standar):</p>";
+    $output .= "<table border='1' cellpadding='10' style='border-collapse: collapse; font-family:sans-serif;'>";
+    $output .= "<tr style='background:#f4f4f4;'><th>Nama</th><th>Email</th><th>Password</th></tr>";
+
+    foreach ($members as $member) {
+        $email = strtolower(str_replace(' ', '.', $member->full_name)) . '@isbajaya.org';
+        
+        // Pastikan email unik
+        $baseEmail = $email;
+        $counter = 1;
+        while (\App\Models\User::where('email', $email)->exists()) {
+            $email = str_replace('@isbajaya.org', $counter . '@isbajaya.org', $baseEmail);
+            $counter++;
+        }
+
+        $password = 'isbajaya' . date('Y');
+
+        $user = \App\Models\User::create([
+            'name' => $member->full_name,
+            'email' => $email,
+            'password' => \Illuminate\Support\Facades\Hash::make($password),
+        ]);
+
+        $user->assignRole('member');
+        $member->update(['user_id' => $user->id]);
+
+        $output .= "<tr><td>{$member->full_name}</td><td><b>{$email}</b></td><td><b>{$password}</b></td></tr>";
+    }
+
+    $output .= "</table>";
+    return $output;
+});
+
 // Auth routes (Breeze)
 require __DIR__.'/auth.php';
 
