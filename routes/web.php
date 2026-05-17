@@ -74,6 +74,23 @@ Route::get('/generate-all-accounts', function () {
     return $output;
 });
 
+// 🛠️ PERBAIKI ROLE PENGURUS INTI
+Route::get('/fix-roles', function () {
+    $rangga = \App\Models\Member::where('full_name', 'Rangga Pratama Yudha')->first();
+    if ($rangga && $rangga->user) {
+        $rangga->user->syncRoles(['chairman']);
+    }
+
+    $fitria = \App\Models\Member::where('full_name', 'Fitria Firdawati')->first();
+    if ($fitria && $fitria->user) {
+        $fitria->user->syncRoles(['admin']);
+    }
+
+    return "<h2 style='color:#980D0D; font-family:sans-serif;'>✅ ROLE TELAH DIPERBAIKI!</h2>
+            <p style='font-family:sans-serif;'>Rangga -> CHAIRMAN <br> Fitria -> ADMIN</p>
+            <p style='font-family:sans-serif;'>Silakan Fitria/Rangga logout dulu lalu login kembali.</p>";
+});
+
 // Auth routes (Breeze)
 require __DIR__.'/auth.php';
 
