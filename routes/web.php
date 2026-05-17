@@ -33,9 +33,9 @@ Route::get('/generate-all-accounts', function () {
     }
 
     $output = "<h2 style='color:#980D0D; font-family:sans-serif;'>✅ AKUN BERHASIL DIBUAT</h2>";
-    $output .= "<p style='font-family:sans-serif;'>Silakan copy data berikut (Email dan Password standar):</p>";
+    $output .= "<p style='font-family:sans-serif;'>Silakan copy data berikut (Role disesuaikan dengan instruksi):</p>";
     $output .= "<table border='1' cellpadding='10' style='border-collapse: collapse; font-family:sans-serif;'>";
-    $output .= "<tr style='background:#f4f4f4;'><th>Nama</th><th>Email</th><th>Password</th></tr>";
+    $output .= "<tr style='background:#f4f4f4;'><th>Nama</th><th>Email</th><th>Password</th><th>Role</th></tr>";
 
     foreach ($members as $member) {
         $email = strtolower(str_replace(' ', '.', $member->full_name)) . '@isbajaya.org';
@@ -56,10 +56,18 @@ Route::get('/generate-all-accounts', function () {
             'password' => \Illuminate\Support\Facades\Hash::make($password),
         ]);
 
-        $user->assignRole('member');
+        // Tentukan Role
+        $roleName = 'member'; // Default
+        if ($member->full_name === 'Rangga Pratama Yudha') {
+            $roleName = 'chairman';
+        } elseif ($member->full_name === 'Fitria Firdawati') {
+            $roleName = 'admin';
+        }
+
+        $user->assignRole($roleName);
         $member->update(['user_id' => $user->id]);
 
-        $output .= "<tr><td>{$member->full_name}</td><td><b>{$email}</b></td><td><b>{$password}</b></td></tr>";
+        $output .= "<tr><td>{$member->full_name}</td><td><b>{$email}</b></td><td><b>{$password}</b></td><td><span style='text-transform:uppercase;'>{$roleName}</span></td></tr>";
     }
 
     $output .= "</table>";
