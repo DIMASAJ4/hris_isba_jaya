@@ -162,6 +162,14 @@ Route::middleware(['auth', 'role:admin'])
     Route::get('/events/{event}/pdf', [EventController::class, 'downloadPdf'])
         ->name('events.pdf');
 
+    // Absensi (Attendance)
+    Route::get('/attendance', [\App\Http\Controllers\Admin\AttendanceController::class, 'index'])->name('attendance.index');
+    Route::get('/attendance/{event}/manage', [\App\Http\Controllers\Admin\AttendanceController::class, 'manage'])->name('attendance.manage');
+    Route::post('/attendance/{event}/toggle', [\App\Http\Controllers\Admin\AttendanceController::class, 'toggleAttendance'])->name('attendance.toggle');
+    Route::put('/attendance/{event}/bulk', [\App\Http\Controllers\Admin\AttendanceController::class, 'updateBulk'])->name('attendance.updateBulk');
+    Route::get('/attendance/{event}/pdf', [\App\Http\Controllers\Admin\AttendanceController::class, 'exportPdf'])->name('attendance.pdf');
+    Route::get('/attendance/{event}/excel', [\App\Http\Controllers\Admin\AttendanceController::class, 'exportExcel'])->name('attendance.excel');
+
     // Pengaturan Sistem
     Route::get('/settings', [UserController::class, 'index'])
         ->name('settings.index');
@@ -209,4 +217,19 @@ Route::middleware(['auth'])
     // Struktur Organisasi
     Route::get('/organization', [OrganizationController::class, 'memberView'])
         ->name('organization');
+
+    // Absensi (Attendance)
+    Route::get('/attendance', [\App\Http\Controllers\Member\AttendanceController::class, 'index'])->name('attendance.index');
+    Route::post('/attendance/{event}/checkin', [\App\Http\Controllers\Member\AttendanceController::class, 'checkIn'])->name('attendance.checkin');
+    Route::post('/attendance/{event}/permit', [\App\Http\Controllers\Member\AttendanceController::class, 'submitStatus'])->name('attendance.permit');
+});
+
+// 🛠️ MIGRATION ROUTE FOR PRODUCTION (InfinityFree)
+Route::get('/migrate-db', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return "<h2 style='color:#980D0D; font-family:sans-serif;'>✅ MIGRATION SUCCESSFUL!</h2><pre style='background:#f4f4f4; padding:15px; border-radius:8px;'>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
+    } catch (\Exception $e) {
+        return "<h2 style='color:red; font-family:sans-serif;'>❌ MIGRATION FAILED!</h2><p style='font-family:sans-serif;'>" . $e->getMessage() . "</p>";
+    }
 });

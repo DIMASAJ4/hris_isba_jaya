@@ -19,7 +19,17 @@ class Event extends Model
         'description',
         'notes',
         'status',
-        'created_by'
+        'created_by',
+        'attendance_open',
+        'attendance_opened_at',
+        'attendance_closed_at'
+    ];
+
+    protected $casts = [
+        'event_date' => 'date',
+        'attendance_open' => 'boolean',
+        'attendance_opened_at' => 'datetime',
+        'attendance_closed_at' => 'datetime'
     ];
 
     protected static function booted()
@@ -49,5 +59,37 @@ class Event extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(EventAttendance::class);
+    }
+
+    public function isAttendanceOpen(): bool
+    {
+        return $this->attendance_open && 
+               (!$this->attendance_opened_at || $this->attendance_opened_at->isPast()) && 
+               (!$this->attendance_closed_at || $this->attendance_closed_at->isFuture());
+    }
+
+    public function totalHadir(): int
+    {
+        return $this->attendances()->where('status', 'Hadir')->count();
+    }
+
+    public function totalTidakHadir(): int
+    {
+        return $this->attendances()->where('status', 'Tidak Hadir')->count();
+    }
+
+    public function totalIzin(): int
+    {
+        return $this->attendances()->where('status', 'Izin')->count();
+    }
+
+    public function totalSakit(): int
+    {
+        return $this->attendances()->where('status', 'Sakit')->count();
     }
 }

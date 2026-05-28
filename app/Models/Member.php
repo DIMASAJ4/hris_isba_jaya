@@ -65,4 +65,25 @@ class Member extends Model
     {
         return $this->photo ? Storage::url($this->photo) : asset('images/default-avatar.png');
     }
+
+    public function attendances()
+    {
+        return $this->hasMany(EventAttendance::class);
+    }
+
+    public function hasCheckedIn($eventId): bool
+    {
+        return $this->attendances()
+            ->where('event_id', $eventId)
+            ->where(function($query) {
+                $query->where('status', 'Hadir')
+                      ->orWhereNotNull('checked_in_at');
+            })
+            ->exists();
+    }
+
+    public function attendanceFor($eventId)
+    {
+        return $this->attendances()->where('event_id', $eventId)->first();
+    }
 }

@@ -24,6 +24,11 @@
                     <x-nav-link :href="$orgRoute" :active="request()->routeIs('*.organization*')">
                         {{ __('Struktur Organisasi') }}
                     </x-nav-link>
+                    @auth
+                    <x-nav-link :href="route('member.attendance.index')" :active="request()->routeIs('member.attendance.*')">
+                        {{ __('Absensi') }}
+                    </x-nav-link>
+                    @endauth
                 </div>
             </div>
 
@@ -82,6 +87,11 @@
             <x-responsive-nav-link :href="$orgRoute" :active="request()->routeIs('*.organization*')">
                 {{ __('Struktur Organisasi') }}
             </x-responsive-nav-link>
+            @auth
+            <x-responsive-nav-link :href="route('member.attendance.index')" :active="request()->routeIs('member.attendance.*')">
+                {{ __('Absensi') }}
+            </x-responsive-nav-link>
+            @endauth
         </div>
 
         <!-- Responsive Settings Options -->
