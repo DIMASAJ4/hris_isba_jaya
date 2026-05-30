@@ -36,19 +36,24 @@ class Event extends Model
     {
         static::creating(function ($event) {
             // Auto-generate event_code (BA-YYYY-XXX)
+            // withTrashed() ensures deleted events' codes are never reused
             $year = date('Y');
-            $latestEvent = static::whereYear('created_at', $year)
-                ->orderBy('id', 'desc')
-                ->first();
+            $prefix = "BA-{$year}-";
+
+            // Find the highest sequence number already used this year
+            $maxCode = static::withTrashed()
+                ->where('event_code', 'like', "{$prefix}%")
+                ->max('event_code');
 
             $nextNumber = 1;
-            if ($latestEvent) {
-                $lastCode = explode('-', $latestEvent->event_code);
-                $nextNumber = (int)end($lastCode) + 1;
+            if ($maxCode) {
+                $parts = explode('-', $maxCode);
+                $lastNum = (int) end($parts);
+                $nextNumber = $lastNum + 1;
             }
 
-            $event->event_code = sprintf('BA-%s-%s', $year, str_pad($nextNumber, 3, '0', STR_PAD_LEFT));
-            
+            $event->event_code = $prefix . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+
             // Auto-set created_by
             if (!$event->created_by) {
                 $event->created_by = Auth::id();
