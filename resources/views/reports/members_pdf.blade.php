@@ -29,8 +29,9 @@
 <body>
 
     <div class="header">
-        <h1>Ikatan Seluruh Mahasiswa Bangka (ISBA) JAYA</h1>
-        <p>Sekretariat: Jl. Contoh No. 123, Yogyakarta. Email: info@isbajaya.org</p>
+        <h1>IKATAN PELAJAR DAN MAHASISWA BANGKA JAKARTA RAYA</h1>
+        <h2 style="font-size: 14px; color: #1E3A5F; margin: 2px 0;">(ISBA JAYA)</h2>
+        <p>Sekretariat: Jl. Langga Raya No 77 A, Lenteng Agung, Jagakarsa, Jakarta Selatan | Email: info@isbajaya.org</p>
         <p>Sistem Informasi Manajemen Keanggotaan (HRIS)</p>
     </div>
 

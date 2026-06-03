@@ -36,10 +36,11 @@
 <body>
 
     <div class="kop-surat">
-        <img src="{{ public_path('images/logowo.png') }}" class="logo-img">
+        <img src="{{ public_path('images/logoasli.png') }}" class="logo-img">
         <div class="instansi-box">
-            <h1 class="instansi-name">IKATAN STUDI BANTEN JAYA (ISBA JAYA)</h1>
-            <p class="instansi-sub">Jl. Peradaban No. 123, Banten, Indonesia</p>
+            <h1 class="instansi-name">IKATAN PELAJAR DAN MAHASISWA BANGKA JAKARTA RAYA</h1>
+            <h2 style="font-size: 12px; font-weight: bold; color: #980D0D; margin: 2px 0;">(ISBA JAYA)</h2>
+            <p class="instansi-sub">Jl. Langga Raya No 77 A, Lenteng Agung, Jagakarsa, Jakarta Selatan</p>
             <p class="instansi-sub">Email: sekretariat@isbajaya.org | Website: www.isbajaya.org</p>
         </div>
         <div class="clear"></div>
@@ -64,6 +65,10 @@
         <tr>
             <td class="label">Laporan Dibuat</td>
             <td>: {{ date('d/m/Y H:i') }}</td>
+        </tr>
+        <tr>
+            <td class="label">Oleh</td>
+            <td>: {{ auth()->user()->name }}</td>
         </tr>
     </table>
 
@@ -140,7 +145,7 @@
         </tr>
         <tr>
             <td>( ........................................... )</td>
-            <td>( ........................................... )</td>
+            <td>( {{ auth()->user()->name }} )</td>
         </tr>
     </table>
 
