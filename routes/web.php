@@ -233,3 +233,17 @@ Route::get('/migrate-db', function () {
         return "<h2 style='color:red; font-family:sans-serif;'>❌ MIGRATION FAILED!</h2><p style='font-family:sans-serif;'>" . $e->getMessage() . "</p>";
     }
 });
+
+// 🛠️ SEED ADMIN USERS IN PRODUCTION
+Route::get('/seed-admins', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('db:seed', [
+            '--class' => 'AdminUsersSeeder',
+            '--force' => true
+        ]);
+        return "<h2 style='color:#980D0D; font-family:sans-serif;'>✅ ADMIN SEEDING SUCCESSFUL!</h2><pre style='background:#f4f4f4; padding:15px; border-radius:8px;'>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
+    } catch (\Exception $e) {
+        return "<h2 style='color:red; font-family:sans-serif;'>❌ SEEDING FAILED!</h2><p style='font-family:sans-serif;'>" . $e->getMessage() . "</p>";
+    }
+});
+
