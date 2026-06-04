@@ -6,9 +6,9 @@
         body { font-family: 'Helvetica', sans-serif; font-size: 12px; color: #333; line-height: 1.5; }
         .kop-surat { border-bottom: 3px solid #980D0D; padding-bottom: 10px; margin-bottom: 20px; }
         .logo-img { width: 70px; height: auto; float: left; margin-top: 5px; }
-        .instansi-box { margin-left: 90px; }
-        .instansi-name { font-size: 18px; font-weight: bold; color: #980D0D; margin: 0; }
-        .instansi-sub { font-size: 10px; color: #666; margin: 0; }
+        .instansi-box { margin-left: 90px; text-align: center; margin-right: 20px; }
+        .instansi-name { font-size: 15px; font-weight: bold; color: #980D0D; margin: 0; line-height: 1.3; }
+        .instansi-sub { font-size: 9px; color: #666; margin: 2px 0 0 0; }
         .doc-title { text-align: center; text-transform: uppercase; font-size: 16px; font-weight: bold; margin: 30px 0 5px 0; text-decoration: underline; }
         .doc-number { text-align: center; margin-bottom: 30px; font-family: 'Courier', monospace; font-size: 11px; }
         .info-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
