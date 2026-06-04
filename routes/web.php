@@ -247,3 +247,25 @@ Route::get('/seed-admins', function () {
     }
 });
 
+// 🛠️ DEBUG FILES IN PRODUCTION
+Route::get('/debug-files', function () {
+    $dir = public_path('images');
+    if (!is_dir($dir)) {
+        return "Folder public/images tidak ditemukan.";
+    }
+    $files = scandir($dir);
+    $output = "<h3>Daftar file di public/images:</h3><ul>";
+    foreach ($files as $file) {
+        if ($file != '.' && $file != '..') {
+            $output .= "<li>" . $file . " (" . filesize($dir . '/' . $file) . " bytes)</li>";
+        }
+    }
+    $output .= "</ul>";
+    
+    $output .= "<h3>Path Info:</h3>";
+    $output .= "Public Path: " . public_path() . "<br>";
+    $output .= "Base Path: " . base_path() . "<br>";
+    return $output;
+});
+
+
