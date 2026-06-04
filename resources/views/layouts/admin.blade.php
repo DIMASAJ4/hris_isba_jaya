@@ -19,7 +19,7 @@
     {{-- Logo Area --}}
     <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
       <div class="flex-shrink-0">
-        <x-application-logo class="h-10 w-auto" />
+        <x-application-logo class="h-11 w-11 rounded-full bg-white p-0.5 shadow-md" />
       </div>
       <div>
         <p class="text-white font-bold text-sm leading-tight uppercase tracking-tighter">HRIS ISBA JAYA</p>

@@ -8,8 +8,8 @@
   <div class="hidden md:flex w-5/12 flex-col justify-between p-10" style="background-color: #980D0D">
     {{-- Logo --}}
     <div>
-      <div class="mb-8">
-        <x-application-logo class="h-24 w-auto drop-shadow-lg" />
+      <div class="mb-8 flex justify-start">
+        <x-application-logo class="h-24 w-24 rounded-full bg-white p-1 shadow-lg border border-white/20" />
       </div>
       <h1 class="text-2xl font-bold text-white mb-2">HRIS ISBA JAYA</h1>
       <p class="text-red-200 text-sm italic">Kelola Anggota, Bangun Organisasi</p>

@@ -36,7 +36,7 @@
 <body>
 
     <div class="kop-surat">
-        <img src="{{ public_path('images/logoasli.png') }}" class="logo-img">
+        <img src="{{ public_path('images/logowo.png') }}" class="logo-img">
         <div class="instansi-box">
             <h1 class="instansi-name">IKATAN PELAJAR DAN MAHASISWA BANGKA JAKARTA RAYA</h1>
             <h2 style="font-size: 12px; font-weight: bold; color: #980D0D; margin: 2px 0;">(ISBA JAYA)</h2>
