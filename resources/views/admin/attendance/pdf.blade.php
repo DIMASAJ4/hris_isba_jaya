@@ -4,9 +4,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
         body { font-family: 'Helvetica', sans-serif; font-size: 11px; color: #333; line-height: 1.4; }
-        .kop-surat { border-bottom: 3px solid #980D0D; padding-bottom: 10px; margin-bottom: 15px; }
-        .logo-img { width: 65px; height: auto; float: left; margin-top: 5px; }
-        .instansi-box { margin-left: 85px; text-align: center; margin-right: 15px; }
+        .kop-surat { position: relative; border-bottom: 3px solid #980D0D; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+        .logo-img { position: absolute; left: 10px; top: 0px; width: 65px; height: auto; }
+        .instansi-box { margin: 0 75px; text-align: center; }
         .instansi-name { font-size: 14px; font-weight: bold; color: #980D0D; margin: 0; line-height: 1.3; }
         .instansi-sub { font-size: 8.5px; color: #666; margin: 2px 0 0 0; }
         .doc-title { text-align: center; text-transform: uppercase; font-size: 14px; font-weight: bold; margin: 20px 0 5px 0; text-decoration: underline; }
