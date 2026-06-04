@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Member;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -36,6 +37,7 @@ class AdminUsersSeeder extends Seeder
                 'name' => 'Miftahul Jannah',
                 'email' => 'miftah@isbajaya.org',
                 'password' => $password,
+                'search_name' => 'Miftahul Jannah', // nama lengkap di seeder member
             ],
         ];
 
@@ -48,6 +50,14 @@ class AdminUsersSeeder extends Seeder
                 ]
             );
             $user->syncRoles(['admin']);
+
+            // Hubungkan ke data Member
+            $memberName = $userData['search_name'] ?? $userData['name'];
+            $member = Member::where('full_name', 'LIKE', '%' . $memberName . '%')->first();
+            if ($member) {
+                $member->update(['user_id' => $user->id]);
+            }
         }
     }
 }
+
