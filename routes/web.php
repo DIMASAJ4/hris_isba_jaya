@@ -268,75 +268,7 @@ Route::get('/debug-files', function () {
     return $output;
 });
 
-// 🛠️ DUMP ALL ACCOUNTS FOR REPORTING
-Route::get('/dump-all-accounts', function () {
-    // 1. Jalankan auto-generation untuk member yang belum punya akun
-    $membersWithoutAccount = \App\Models\Member::whereNull('user_id')->get();
-    foreach ($membersWithoutAccount as $member) {
-        $email = strtolower(str_replace(' ', '.', $member->full_name)) . '@isbajaya.org';
-        $baseEmail = $email;
-        $counter = 1;
-        while (\App\Models\User::where('email', $email)->exists()) {
-            $email = str_replace('@isbajaya.org', $counter . '@isbajaya.org', $baseEmail);
-            $counter++;
-        }
-        $password = 'isbajaya' . date('Y');
-        
-        $user = \App\Models\User::create([
-            'name' => $member->full_name,
-            'email' => $email,
-            'password' => \Illuminate\Support\Facades\Hash::make($password),
-        ]);
 
-        $roleName = 'member';
-        if ($member->full_name === 'Rangga Pratama Yudha') {
-            $roleName = 'chairman';
-        } elseif ($member->full_name === 'Fitria Firdawati') {
-            $roleName = 'admin';
-        }
-
-        $user->assignRole($roleName);
-        $member->update(['user_id' => $user->id]);
-    }
-
-    // 2. Hubungkan admin Bunga dkk ke Member jika belum terhubung
-    $admins = ['Bunga Aprilia Arianto', 'Aulya Muhammad Reza', 'Hendri Kuswantoro', 'Miftahul Jannah'];
-    foreach ($admins as $adminName) {
-        $user = \App\Models\User::where('name', $adminName)->first();
-        if ($user) {
-            $member = \App\Models\Member::where('full_name', 'LIKE', '%' . $adminName . '%')->first();
-            if ($member && is_null($member->user_id)) {
-                $member->update(['user_id' => $user->id]);
-            }
-        }
-    }
-
-    // 3. Tarik semua data user dan tampilkan dalam bentuk JSON terstruktur
-    $users = \App\Models\User::with('roles')->get();
-    $data = [];
-    foreach ($users as $u) {
-        $role = $u->roles->pluck('name')->first() ?? 'member';
-        
-        // Tebak password default untuk kemudahan report
-        $pw = 'isbajaya' . date('Y'); // default untuk member massal
-        if (in_array($u->name, $admins)) {
-            $pw = 'admin123';
-        } elseif ($u->email === 'admin@isbajaya.org') {
-            $pw = 'admin123';
-        } elseif ($u->email === 'ketua@isbajaya.org') {
-            $pw = 'admin123 (atau ketua123)';
-        }
-
-        $data[] = [
-            'name' => $u->name,
-            'email' => $u->email,
-            'password' => $pw,
-            'role' => strtoupper($role)
-        ];
-    }
-
-    return response()->json($data);
-});
 
 
 
