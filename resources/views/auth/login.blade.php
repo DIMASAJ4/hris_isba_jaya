@@ -29,7 +29,7 @@
     </div>
 
     {{-- Footer --}}
-    <p class="text-blue-400 text-xs">© 2026 ISBA JAYA · STT Nurul Fikri</p>
+    <p class="text-blue-400 text-xs">© 2026 ISBA JAYA</p>
   </div>
 
   {{-- RIGHT PANEL --}}

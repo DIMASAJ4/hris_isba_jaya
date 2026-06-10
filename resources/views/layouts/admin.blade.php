@@ -22,8 +22,7 @@
         <x-application-logo class="h-11 w-11 rounded-full bg-white p-0.5 shadow-md" />
       </div>
       <div>
-        <p class="text-white font-bold text-sm leading-tight uppercase tracking-tighter">HRIS ISBA JAYA</p>
-        <p class="text-red-200 text-[10px] font-medium uppercase">STT Nurul Fikri</p>
+        <p class="text-white font-bold text-sm leading-tight uppercase tracking-tighter mt-1">HRIS ISBA JAYA</p>
       </div>
     </div>
 

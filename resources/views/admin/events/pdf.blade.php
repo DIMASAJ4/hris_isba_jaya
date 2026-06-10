@@ -26,20 +26,7 @@
 <body>
 
     <div class="kop-surat">
-        @php
-            $logoPath = public_path('images/logoasli.png');
-            $logoBase64 = '';
-            try {
-                if (file_exists($logoPath)) {
-                    $logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
-                }
-            } catch (\Exception $e) {
-                $logoBase64 = '';
-            }
-        @endphp
-        @if($logoBase64)
-            <img src="{{ $logoBase64 }}" class="logo-img">
-        @endif
+        <img src="{{ public_path('images/logoasli.jpeg') }}" class="logo-img">
         <div class="instansi-box">
             <h1 class="instansi-name">IKATAN PELAJAR DAN MAHASISWA BANGKA JAKARTA RAYA</h1>
             <h2 style="font-size: 14px; font-weight: bold; color: #980D0D; margin: 2px 0;">(ISBA JAYA)</h2>
