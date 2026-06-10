@@ -5,17 +5,21 @@
     <title>Laporan Anggota ISBA JAYA</title>
     <style>
         body { font-family: sans-serif; font-size: 11px; color: #333; line-height: 1.4; }
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #1E3A5F; padding-bottom: 10px; }
-        .header h1 { margin: 0; color: #1E3A5F; text-transform: uppercase; font-size: 18px; }
-        .header p { margin: 2px 0; color: #666; }
         
+        .kop-surat { position: relative; border-bottom: 3px solid #980D0D; padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
+        .logo-img { position: absolute; left: 10px; top: 0px; width: 70px; height: auto; }
+        .instansi-box { margin: 0 80px; text-align: center; }
+        .instansi-name { font-size: 15px; font-weight: bold; color: #980D0D; margin: 0; line-height: 1.3; }
+        .instansi-sub { font-size: 9px; color: #666; margin: 2px 0 0 0; }
+        .clear { clear: both; }
+
         .meta { margin-bottom: 15px; width: 100%; }
         .meta td { vertical-align: top; }
         .title-box { background: #f4f6f9; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
-        .title-box h2 { margin: 0; font-size: 14px; color: #1E3A5F; }
+        .title-box h2 { margin: 0; font-size: 14px; color: #980D0D; }
         
         table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th { background-color: #1E3A5F; color: white; text-align: left; padding: 8px; border: 1px solid #1E3A5F; }
+        th { background-color: #980D0D; color: white; text-align: left; padding: 8px; border: 1px solid #980D0D; }
         td { padding: 8px; border: 1px solid #ddd; }
         tr:nth-child(even) { background-color: #f9f9f9; }
         
@@ -28,11 +32,15 @@
 </head>
 <body>
 
-    <div class="header">
-        <h1>IKATAN PELAJAR DAN MAHASISWA BANGKA JAKARTA RAYA</h1>
-        <h2 style="font-size: 14px; color: #1E3A5F; margin: 2px 0;">(ISBA JAYA)</h2>
-        <p>Sekretariat: Jl. Langga Raya No 77 A, Lenteng Agung, Jagakarsa, Jakarta Selatan | Email: info@isbajaya.org</p>
-        <p>Sistem Informasi Manajemen Keanggotaan (HRIS)</p>
+    <div class="kop-surat">
+        <img src="{{ public_path('images/logoasli.png') }}" class="logo-img">
+        <div class="instansi-box">
+            <h1 class="instansi-name">IKATAN PELAJAR DAN MAHASISWA BANGKA JAKARTA RAYA</h1>
+            <h2 style="font-size: 14px; font-weight: bold; color: #980D0D; margin: 2px 0;">(ISBA JAYA)</h2>
+            <p class="instansi-sub">Jl. Langga Raya No 77 A, Lenteng Agung, Jagakarsa, Jakarta Selatan</p>
+            <p class="instansi-sub">Email: sekretariat@isbajaya.org | Website: www.isbajaya.org</p>
+        </div>
+        <div class="clear"></div>
     </div>
 
     <div class="title-box">
