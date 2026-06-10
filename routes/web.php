@@ -268,3 +268,42 @@ Route::get('/debug-files', function () {
     return $output;
 });
 
+// 🛠️ RESET ADMIN PASSWORDS IN PRODUCTION
+Route::get('/reset-admin-password', function () {
+    try {
+        $emails = [
+            'admin@isbajaya.org',
+            'bunga@isbajaya.org',
+            'aulya@isbajaya.org',
+            'hendri@isbajaya.org',
+            'miftah@isbajaya.org'
+        ];
+        
+        $output = "<h3>Status Reset Password Admin:</h3><ul>";
+        $password = \Illuminate\Support\Facades\Hash::make('admin123');
+
+        foreach ($emails as $email) {
+            $user = \App\Models\User::where('email', $email)->first();
+            if ($user) {
+                $user->update(['password' => $password]);
+                $output .= "<li>✅ {$email} berhasil di-reset menjadi <b>admin123</b></li>";
+            } else {
+                // Jika user belum ada, buat baru
+                $name = explode('@', $email)[0];
+                $user = \App\Models\User::create([
+                    'name' => ucfirst($name),
+                    'email' => $email,
+                    'password' => $password
+                ]);
+                $user->assignRole('admin');
+                $output .= "<li>🆕 {$email} tidak ditemukan, berhasil dibuat baru dengan password <b>admin123</b></li>";
+            }
+        }
+        $output .= "</ul>";
+        return $output;
+    } catch (\Exception $e) {
+        return "<h2 style='color:red; font-family:sans-serif;'>❌ RESET FAILED!</h2><p style='font-family:sans-serif;'>" . $e->getMessage() . "</p>";
+    }
+});
+
+
