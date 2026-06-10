@@ -23,12 +23,12 @@
 .tree li::before, .tree li::after {
     content: '';
     position: absolute; top: 0; right: 50%;
-    border-top: 2px solid #ccc;
+    border-top: 2px solid #980D0D;
     width: 50%; height: 20px;
 }
 .tree li::after {
     right: auto; left: 50%;
-    border-left: 2px solid #ccc;
+    border-left: 2px solid #980D0D;
 }
 
 /* Menghilangkan garis pada node pertama dan terakhir */
@@ -46,7 +46,7 @@
     border-radius: 5px 0 0 0;
 }
 .tree li:last-child::before {
-    border-right: 2px solid #ccc;
+    border-right: 2px solid #980D0D;
     border-radius: 0 5px 0 0;
 }
 
@@ -54,7 +54,7 @@
 .tree ul ul::before {
     content: '';
     position: absolute; top: 0; left: 50%;
-    border-left: 2px solid #ccc;
+    border-left: 2px solid #980D0D;
     width: 0; height: 20px;
     margin-left: -1px;
 }
@@ -112,18 +112,31 @@
 @php
 function renderNode($position) {
     if (!$position) return;
-    $member = $position->members->first();
-    $name = $member ? $member->full_name : 'Kosong';
-    $photo = $member && $member->photo ? asset('storage/' . $member->photo) : asset('images/default-avatar.png'); // Fallback to a generic or empty
     
-    echo '<div class="node-card">';
-    if ($member && $member->photo) {
-        echo '<img src="'.$photo.'" class="node-img">';
+    echo '<div class="node-card" style="box-shadow: 0 4px 6px rgba(152, 13, 13, 0.05); border-top: 3px solid #980D0D;">';
+    echo '<p class="node-pos" style="border-bottom: 1px solid #f3f4f6; padding-bottom: 6px; margin-bottom: 10px; font-weight: 900; color: #1E3A5F; text-transform: uppercase;">'.$position->name.'</p>';
+    
+    if ($position->members->isEmpty()) {
+        echo '<div style="display:flex; flex-direction:column; align-items:center; margin-bottom: 5px;">';
+        echo '<div class="node-img" style="background:#f3f4f6; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#9ca3af; border:none;">?</div>';
+        echo '<p class="node-name" style="color:#9ca3af; font-style:italic; font-weight:normal;">Kosong</p>';
+        echo '</div>';
     } else {
-        echo '<div class="node-img" style="background:#f3f4f6; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#9ca3af;">'.substr($name, 0, 1).'</div>';
+        foreach ($position->members as $member) {
+            $name = $member->full_name;
+            $photo = $member->photo ? asset('storage/' . $member->photo) : null;
+            
+            echo '<div style="display:flex; flex-direction:column; align-items:center; margin-bottom: 8px; padding: 6px; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background=\'#fff1f2\'" onmouseout="this.style.background=\'transparent\'">';
+            if ($photo) {
+                echo '<img src="'.$photo.'" class="node-img" style="border-color: #fecdd3; padding: 2px;">';
+            } else {
+                echo '<div class="node-img" style="background:#ffe4e6; border-color: #fecdd3; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#be123c; font-size: 16px;">'.substr($name, 0, 1).'</div>';
+            }
+            echo '<p class="node-name" style="color: #333;">'.$name.'</p>';
+            echo '<p style="font-size: 9px; color: #9ca3af; margin: 0;">'.$member->university.'</p>';
+            echo '</div>';
+        }
     }
-    echo '<p class="node-name">'.$name.'</p>';
-    echo '<p class="node-pos">'.$position->name.'</p>';
     echo '</div>';
 }
 @endphp
